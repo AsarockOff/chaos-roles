@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#070914" />
+  <title>Chaos Roles 3D</title>
+  <link rel="stylesheet" href="/style.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="game"></div>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+
+  <section id="menu" class="panel center-panel landing-card">
+    <div class="brand-row">
+      <span class="logo-mark">CR</span>
+      <span class="eyebrow">SOCIAL CHAOS • MULTIJOUEUR 3D</span>
+    </div>
+    <h1>CHAOS<br><span>ROLES</span></h1>
+    <p class="lead">Des rôles secrets, des pouvoirs qui sabotent les déplacements et assez de chaos pour accuser la mauvaise personne.</p>
+
+    <div class="form-grid">
+      <label>
+        <span>Pseudo</span>
+        <input id="name" maxlength="18" autocomplete="nickname" placeholder="Ex. Asarock" />
+      </label>
+      <label>
+        <span>Code du salon</span>
+        <input id="room" maxlength="6" autocomplete="off" autocapitalize="characters" placeholder="Vide = nouveau salon" />
+      </label>
+    </div>
+
+    <button id="join" class="primary-btn"><span>Entrer dans le chaos</span><b>→</b></button>
+    <div id="menuError" class="error"></div>
+
+    <div class="feature-strip">
+      <div><strong>2–12</strong><span>joueurs</span></div>
+      <div><strong>9</strong><span>rôles</span></div>
+      <div><strong>5 min</strong><span>par manche</span></div>
+    </div>
+  </section>
+
+  <section id="lobby" class="panel lobby-panel hidden">
+    <div class="lobby-head">
+      <div>
+        <div class="eyebrow">SALON PRIVÉ</div>
+        <h2>Code <button id="copyCode" class="code-chip" title="Copier le code"><span id="roomCode"></span> ⧉</button></h2>
+      </div>
+      <div class="lobby-status"><span class="status-dot"></span> En attente</div>
+    </div>
+
+    <div class="lobby-layout">
+      <div class="lobby-column">
+        <div class="section-title"><span>Joueurs</span><b id="playerCount">0/12</b></div>
+        <div id="playerList" class="player-list"></div>
+        <button id="start" class="primary-btn hidden"><span>Lancer la partie</span><b>▶</b></button>
+        <div id="lobbyError" class="error"></div>
+      </div>
+
+      <div class="lobby-column roles-column">
+        <div class="section-title"><span>Rôles possibles</span><b>Secrets</b></div>
+        <div id="roleCatalog" class="role-catalog"></div>
+      </div>
+    </div>
+    <p class="muted lobby-help">Partage simplement le lien du site et ce code. Les rôles sont attribués automatiquement au lancement.</p>
+  </section>
+
+  <div id="hud" class="hidden">
+    <aside id="roleHud" class="hud role-hud team-equipe">
+      <div class="mini">TON RÔLE</div>
+      <div class="role-title-row"><span id="roleIcon" class="role-icon">?</span><div><div id="roleName" class="role-name">—</div><div id="roleTeam" class="pill">—</div></div></div>
+      <p id="roleDesc"></p>
+      <div class="ability-card">
+        <kbd>F</kbd>
+        <div><small>POUVOIR</small><strong id="abilityName">—</strong></div>
+        <span id="cooldown" class="cooldown-ready">PRÊT</span>
+      </div>
+    </aside>
+
+    <div class="hud objective-hud">
+      <div class="objective-icon">⚡</div>
+      <div><small>RÉACTEUR</small><strong><span id="delivered">0</span>/3 batteries</strong></div>
+      <div id="timer" class="timer">05:00</div>
+    </div>
+
+    <div class="hud controls-hud">
+      <div><kbd>ZQSD</kbd><span>ou WASD / flèches</span></div>
+      <div><kbd>E</kbd><span>ramasser / poser / livrer</span></div>
+      <div id="effects" class="effects"></div>
+    </div>
+
+    <div id="targetHint" class="target-hint hidden">Cible à portée</div>
+    <div id="events" class="events"></div>
+  </div>
+
+  <section id="roleReveal" class="role-reveal hidden">
+    <div class="role-reveal-card">
+      <div class="eyebrow">IDENTITÉ SECRÈTE</div>
+      <div id="revealIcon" class="reveal-icon">?</div>
+      <h2 id="revealName">—</h2>
+      <div id="revealTeam" class="pill">—</div>
+      <p id="revealDesc"></p>
+      <div class="reveal-power"><kbd>F</kbd><span id="revealAbility">—</span></div>
+      <button id="closeReveal" class="ghost-btn">J’ai compris</button>
+    </div>
+  </section>
+
+  <section id="gameOver" class="panel center-panel gameover-card hidden">
+    <div class="eyebrow">FIN DE PARTIE</div>
+    <div class="end-symbol">✦</div>
+    <h2 id="winner"></h2>
+    <p id="reason"></p>
+    <button id="replay" class="primary-btn"><span>Rejouer</span><b>↻</b></button>
+  </section>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="/main.js"></script>
+</body>
+</html>
